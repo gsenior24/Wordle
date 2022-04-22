@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function deleteLetter()
     {
         const currentWordArr = getCurrentWordArr();
-        const removedLetter = currentWordArr.pop()
+        const removedLetter = currentWordArr.pop();
 
         guessedWords[guessedWords.length - 1] = currentWordArr;
 
@@ -119,6 +119,32 @@ document.addEventListener("DOMContentLoaded", () => {
         lastLetterEl.textContent = '';
         availableSpace = availableSpace - 1;
     }
+
+    document.addEventListener("keyup", (e) => {
+        let keyPressed = String(e.key);
+
+        if (keyPressed === 'Enter')
+            {
+                submitWord();
+                return;
+            }
+
+        if (keyPressed === 'Backspace' && availableSpace !== 1)
+        {
+            deleteLetter();
+            return;
+        }
+
+        let letter = keyPressed.match(/[a-z]/gi);
+        if(!letter || letter.length > 1)
+        {
+            return;
+        }
+        else
+        {
+            updateGuessedWords(letter);
+        }
+    });
 
     for (let i = 0; i < keys.length; i++)
     {
