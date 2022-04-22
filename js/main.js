@@ -1,9 +1,14 @@
+import { WORDS } from "./words.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     createSquares();
 
     let guessedWords = [[]];     
     let availableSpace = 1;
-    let word = "dairy";
+    let word = WORDS[Math.floor(Math.random() * WORDS.length)];
+    let guessedWordCount = 0;
+
+    console.log(word);
 
     const keys = document.querySelectorAll(".keyboard-row button");
 
@@ -26,15 +31,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function getTileColor(letter, index)
+    {
+        const isCorrectLetter = word.includes(letter);
+
+        if (!isCorrectLetter)
+        {
+            return "red";
+        }
+
+        const letterInPosition = word.charAt(index);
+        const isCorrectPosition = letter === letterInPosition;
+
+        if (isCorrectPosition)
+        {
+            return "green";
+        }
+
+        return "orange";
+    }
+
     function submitWord() 
     {
-        const currentWordArr = getCurrentWordArr()
+        const currentWordArr = getCurrentWordArr();
         if (currentWordArr.length !== 5)
         {
             window.alert("Please enter a 5 letter word.")
         }
         
         const currentWord = currentWordArr.join('');
+
+        if (!WORDS.includes(currentWord)) 
+        {
+            window.alert(`${currentWord} is not a valid word!`);
+            throw Error;
+        }
+
+        const firstLetterId = guessedWordCount * 5 + 1;
+        const interval = 200;
+        currentWordArr.forEach((letter, index) => {
+            setTimeout(() => {
+                const tileColor = getTileColor(letter, index);
+                const letterId = firstLetterId + index;
+                const letterEl = document.getElementById(letterId);
+                letterEl.classList.add("animate__flipInX");
+                letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
+            }, interval * index);
+        });
+        
+        guessedWordCount += 1;
         
         if (currentWord === word)
         {
@@ -56,9 +101,23 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             let square = document.createElement("div");
             square.classList.add("square");
+            square.classList.add("animate__animated");
             square.setAttribute("id", i + 1);
             gameBoard.appendChild(square);
         }
+    }
+
+    function deleteLetter()
+    {
+        const currentWordArr = getCurrentWordArr();
+        const removedLetter = currentWordArr.pop()
+
+        guessedWords[guessedWords.length - 1] = currentWordArr;
+
+        const lastLetterEl = document.getElementById(String(availableSpace - 1));
+
+        lastLetterEl.textContent = '';
+        availableSpace = availableSpace - 1;
     }
 
     for (let i = 0; i < keys.length; i++)
@@ -69,6 +128,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (letter === 'enter')
             {
                 submitWord();
+                return;
+            }
+
+            if (letter === 'del')
+            {
+                deleteLetter();
                 return;
             }
 
