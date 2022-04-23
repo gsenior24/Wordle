@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const keys = document.querySelectorAll(".keyboard-row button");
 
+    function initLocalStorage() 
+    {
+        const storedCurrentWordIndex = window.localStorage.getItem('currentWordIndex');
+    }
+
     function getCurrentWordArr()
     {
         const numberOfGuessedWords = guessedWords.length;
