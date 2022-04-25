@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let guessedWordCount = 0;
 
     initLocalStorage();
-    //initStatsModal();
+    initStatsModal();
     createSquares();
 
     console.log(word);
