@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initLocalStorage();
     initStatsModal();
+    //initHelpModal();
     createSquares();
 
     console.log(word);
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentWordArr = getCurrentWordArr();
         if (currentWordArr.length !== 5)
         {
-            window.alert("Please enter a 5 letter word.")
+            return;
         }
         
         const currentWord = currentWordArr.join('');
@@ -241,6 +242,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    function initHelpModal() {
+        const modal = document.getElementById("help-modal");
+    
+        const btn = document.getElementById("help");
+    
+        const span = document.getElementById("close-help");
+    
+        btn.addEventListener("click", function () {
+          modal.style.display = "block";
+        });
+    
+        span.addEventListener("click", function () {
+          modal.style.display = "none";
+        });
+    
+        window.addEventListener("click", function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        });
+      }
 
     for (let i = 0; i < keys.length; i++)
     {
